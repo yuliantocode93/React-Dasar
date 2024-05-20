@@ -1,52 +1,17 @@
 import "./App.css";
-import { useState } from "react";
+import { useEffect } from "react";
 
-function App() {
-  const [activity, setActivity] = useState("");
-  const [todoList, setTodoList] = useState([]);
+export default function App() {
+  useEffect(function () {
+    const getData = fetch("https://api.spaceflightnewsapi.net/v3/blogs")
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        console.log(data);
+      });
+    console.log(getData);
+  }, []);
 
-  function generateId() {
-    return Date.now();
-  }
-
-  function addTodoHandler(event) {
-    event.preventDefault();
-    setTodoList([
-      ...todoList,
-      {
-        id: generateId(),
-        activity: activity,
-      },
-    ]);
-    setActivity("");
-  }
-
-  function deleteTodoHandler(id) {
-    const newTodoList = todoList.filter((todo) => todo.id !== id);
-    setTodoList(newTodoList);
-  }
-  return (
-    <div className="App">
-      <h1>Simple Todo List</h1>
-      <form onSubmit={addTodoHandler}>
-        <input type="text" placeholder="Tugas Baru" value={activity} onChange={(e) => setActivity(e.target.value)} />
-        <button type="submit">Tambah</button>
-      </form>
-      <ul>
-        {todoList.map((todo) => (
-          <li key={todo.id}>
-            {todo.activity} <button onClick={() => deleteTodoHandler(todo.id)}>Hapus</button>
-          </li>
-        ))}
-      </ul>
-      <br></br>
-      <p>Copyright 2021. All rights reserved.</p>
-      <p>Powered by ReactJS</p>
-      <br></br>
-      <br></br>
-      <h1>Data Fetching</h1>
-    </div>
-  );
+  return <h1>fetch data</h1>;
 }
-
-export default App;
