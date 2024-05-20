@@ -1,17 +1,32 @@
 import "./App.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function App() {
+  const [news, setNews] = useState([]);
+
   useEffect(function () {
-    const getData = fetch("https://api.spaceflightnewsapi.net/v3/blogs")
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (data) {
-        console.log(data);
-      });
-    console.log(getData);
+    async function fetchData() {
+      const request = await fetch("https://api.spaceflightnewsapi.net/v3/blogs");
+      const response = await request.json();
+
+      setNews(response);
+    }
+
+    fetchData();
   }, []);
 
-  return <h1>fetch data</h1>;
+  return (
+    <div className="App">
+      <h1>Spaceflight News</h1>
+      <ul>
+        {news.map((item) => (
+          <li key={item.id}>
+            <a href={item.url} target="_blank" rel="noreferrer">
+              {item.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
