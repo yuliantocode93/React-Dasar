@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 export default function App() {
   const [news, setNews] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(function () {
     async function fetchData() {
@@ -10,6 +11,7 @@ export default function App() {
       const response = await request.json();
 
       setNews(response);
+      setLoading(false);
     }
 
     fetchData();
@@ -18,15 +20,15 @@ export default function App() {
   return (
     <div className="App">
       <h1>Spaceflight News</h1>
-      <ul>
-        {news.map((item) => (
-          <li key={item.id}>
-            <a href={item.url} target="_blank" rel="noreferrer">
-              {item.title}
-            </a>
-          </li>
-        ))}
-      </ul>
+      {loading ? (
+        <i>Loading...</i>
+      ) : (
+        <ul>
+          {news.map((item) => (
+            <li key={item.id}>{item.title}</li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
